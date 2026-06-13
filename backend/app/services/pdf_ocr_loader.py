@@ -3,17 +3,28 @@ import easyocr
 from langchain_core.documents import Document
 import numpy as np
 
-reader = easyocr.Reader(['en'])
+reader = None
+
+def get_reader():
+    global reader
+
+    if reader is None:
+        print("Loading EasyOCR...")
+        reader = easyocr.Reader(['en'])
+
+    return reader
 
 def load_scanned_pdf(file_path):
 
     images = convert_from_path(str(file_path))
 
+    ocr_reader = get_reader()
+
     extracted_txt = ""
 
     for image in images:
         
-        result = reader.readtext(
+        result = ocr_reader.readtext(
             np.array(image),
             detail=0
         )

@@ -1,7 +1,7 @@
 from typing import Optional
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
-from models.schemas import TokenData
+from app.models.schemas import TokenData
 
 from dotenv import load_dotenv
 import os

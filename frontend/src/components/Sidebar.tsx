@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
   const username = localStorage.getItem('username') || 'User';
 
   return (
-    <div className="w-72 h-full bg-gray-900 border-r border-gray-800 flex flex-col">
+    <div className="w-72 h-full bg-gray-900 border-r border-gray-800 flex flex-col overflow-x-hidden">
       {/* Logo */}
       <div className="p-5 border-b border-gray-800">
         <div className="flex items-center gap-3">

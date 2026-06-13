@@ -1,12 +1,12 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, status, Depends
 from pathlib import Path
 import shutil
-from services.upload_pipeline import process_documents
-from database.curd import create_document
-from database.connection import get_db
+from app.services.upload_pipeline import process_documents
+from app.database.curd import create_document
+from app.database.connection import get_db
 from sqlalchemy.orm import Session
-from database.models import User
-from services.oauth2 import get_current_user
+from app.database.models import User
+from app.services.oauth2 import get_current_user
 
 upload_router = APIRouter(prefix="/upload",tags=['Upload'])
 

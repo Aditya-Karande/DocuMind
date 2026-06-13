@@ -1,13 +1,13 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 
-from database.connection import get_db
-from database.curd import create_chat, get_chat, get_all_chats, delete_chat, update_chat_name,get_chat_messages
+from app.database.connection import get_db
+from app.database.curd import create_chat, get_chat, get_all_chats, delete_chat, update_chat_name,get_chat_messages
 
-from models.schemas import UpdateChatRequest
+from app.models.schemas import UpdateChatRequest
 
-from database.models import User
-from services.oauth2 import get_current_user
+from app.database.models import User
+from app.services.oauth2 import get_current_user
 
 chat_router = APIRouter(prefix='/chat',tags=['Chat'])
 

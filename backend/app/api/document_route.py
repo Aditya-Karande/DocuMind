@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
-from database.curd import get_document,get_one_document, delete_document
+from app.database.curd import get_document,get_one_document, delete_document
 from sqlalchemy.orm import Session
-from database.connection import get_db
-from services.vector_store import VectorStoreManager
+from app.database.connection import get_db
+from app.services.vector_store import VectorStoreManager
 import os
-from database.models import User
-from services.oauth2 import get_current_user
+from app.database.models import User
+from app.services.oauth2 import get_current_user
 
 doc_router = APIRouter(prefix='/documents', tags=['Documents'])
 

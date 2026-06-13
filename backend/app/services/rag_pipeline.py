@@ -5,7 +5,7 @@ from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
 from pathlib import Path
-from database.curd import get_recent_messages
+from app.database.curd import get_recent_messages
 from groq import RateLimitError
 from fastapi import HTTPException
 import json

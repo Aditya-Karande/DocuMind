@@ -1,10 +1,10 @@
 from fastapi import FastAPI
-from api.upload_route import upload_router
-from api.query_route import query_router
-from api.chat_route import chat_router
-from api.document_route import doc_router
-from api.user_route import user_router
-from api.authentication import auth_router
+from app.api.upload_route import upload_router
+from app.api.query_route import query_router
+from app.api.chat_route import chat_router
+from app.api.document_route import doc_router
+from app.api.user_route import user_router
+from app.api.authentication import auth_router
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()

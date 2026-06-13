@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends
-from services.rag_pipeline import generate_output, generate_summary, generate_quiz
-from models.schemas import Query, QuizRequest
+from app.services.rag_pipeline import generate_output, generate_summary, generate_quiz
+from app.models.schemas import Query, QuizRequest
 from sqlalchemy.orm import Session
-from database.connection import get_db
-from database.curd import create_message
-from database.models import User
-from services.oauth2 import get_current_user
+from app.database.connection import get_db
+from app.database.curd import create_message
+from app.database.models import User
+from app.services.oauth2 import get_current_user
 import json
 
 query_router = APIRouter(prefix="/query", tags=['Query'])

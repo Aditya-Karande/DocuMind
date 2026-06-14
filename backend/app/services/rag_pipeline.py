@@ -97,7 +97,10 @@ def generate_output(db, query, chat_id, top_k=10):
         vector_store = VectorStoreManager(chat_id)
         print("STEP 3: VectorStoreManager created")
 
-        rag_retriever = RAGRetriever(embedding_manager, vector_store)
+        rag_retriever = RAGRetriever(
+            embedding_manager,
+            vector_store
+        )
         print("STEP 4: Retriever created")
 
         message = get_recent_messages(
@@ -116,24 +119,63 @@ def generate_output(db, query, chat_id, top_k=10):
 
 """
 
-        standalone_query = rewrite_query(query, conversation_history)
+        standalone_query = rewrite_query(
+            query,
+            conversation_history
+        )
         print("STEP 6: Query rewritten")
 
-        results = rag_retriever.retrieve(standalone_query, top_k)
+        results = rag_retriever.retrieve(
+            standalone_query,
+            top_k
+        )
         print("STEP 7: Retrieval complete")
 
-        # keep your existing context code here
+        seen = set()
+        sources = []
+        context = ""
+
+        for i, doc in enumerate(results):
+
+            source = Path(
+                doc["metadata"]["source"]
+            ).name
+
+            page = doc["metadata"].get("page")
+
+            key = (source, page)
+
+            if key not in seen:
+                seen.add(key)
+
+                sources.append({
+                    "source": source,
+                    "page": page if page is not None else "N/A"
+                })
+
+            context += f"""
+Document {i+1}
+{doc["document"]}
+
+source:{source}
+page:{page}
+"""
 
         if not context:
             print("STEP 8: No context found")
+
             return {
-                "answer":"No relavent content found for the given query...",
-                "sources":[]
+                "answer": "No relevant content found for the given query.",
+                "sources": []
             }
 
         print("STEP 9: Context built")
 
-        prompt = generate_prompt(query, context, conversation_history)
+        prompt = generate_prompt(
+            query,
+            context,
+            conversation_history
+        )
         print("STEP 10: Prompt generated")
 
         answer = LLM.invoke(prompt)
@@ -145,12 +187,25 @@ def generate_output(db, query, chat_id, top_k=10):
             "error": None
         }
 
+    except RateLimitError:
+        raise HTTPException(
+            status_code=429,
+            detail="Daily AI limit reached. Please try again later."
+        )
+
     except Exception as e:
         print("RAG ERROR:", str(e))
-        raise
+
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 
 #generate summary
 def generate_summary(db, chat_id):
+
+    from .vector_store import VectorStoreManager
+
     vector_store = VectorStoreManager(chat_id=chat_id)
 
     #get all chunks directly (no query.)
@@ -213,6 +268,9 @@ Summary:
 
 #generate quiz
 def generate_quiz(db, chat_id, num_questions=5):
+
+    from .vector_store import VectorStoreManager
+
     vector_store = VectorStoreManager(chat_id)
     all_docs = vector_store.get_all_docs()
     all_text = "\n".join([doc["document"] for doc in all_docs])

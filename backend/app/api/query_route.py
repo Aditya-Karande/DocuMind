@@ -22,8 +22,11 @@ def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_u
         db=db
     )
     
+    print("QUERY ROUTE: BEFORE IMPORT")
 
     res = generate_output(query=req.req,db=db,chat_id=chat_id)
+
+    print("QUERY ROUTE: AFTER IMPORT")
 
     #save assistants message
     create_message(

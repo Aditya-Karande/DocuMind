@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends
-from app.services.rag_pipeline import generate_output, generate_summary, generate_quiz
 from app.models.schemas import Query, QuizRequest
 from sqlalchemy.orm import Session
 from app.database.connection import get_db
@@ -21,6 +20,8 @@ def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_u
         db=db
     )
     
+    from app.services.rag_pipeline import generate_output
+
     res = generate_output(query=req.req,db=db,chat_id=chat_id)
 
     #save assistants message
@@ -38,6 +39,8 @@ def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_u
 @query_router.post('/summary/{chat_id}')
 def create_summary(chat_id: int, db:Session = Depends(get_db),get_current_user: User = Depends(get_current_user)):
 
+    from app.services.rag_pipeline import generate_summary
+    
     response = generate_summary(db=db, chat_id=chat_id)
 
     #save assistants message as "Summary"
@@ -53,6 +56,8 @@ def create_summary(chat_id: int, db:Session = Depends(get_db),get_current_user: 
 @query_router.post('/quiz/{chat_id}')
 def create_quiz(chat_id: int, req:QuizRequest, db:Session = Depends(get_db),get_current_user: User = Depends(get_current_user)):
 
+    from app.services.rag_pipeline import generate_quiz
+    
     response = generate_quiz(db=db, chat_id=chat_id, num_questions=req.num_questions)
 
     #save assistants message as "Quiz"

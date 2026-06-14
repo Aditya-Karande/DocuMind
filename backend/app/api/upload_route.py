@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, status, Depends
 from pathlib import Path
 import shutil
-from app.services.upload_pipeline import process_documents
 from app.database.curd import create_document
 from app.database.connection import get_db
 from sqlalchemy.orm import Session
@@ -57,6 +56,8 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
         shutil.copyfileobj(file.file, buffer)
 
     try:
+
+        from app.services.upload_pipeline import process_documents
 
         process_documents(
             chat_id= chat_id,

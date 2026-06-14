@@ -87,92 +87,66 @@ Answer:
 #output generation
 def generate_output(db, query, chat_id, top_k=10):
 
-    embedding_manager = EmbeddingManger()
-    vector_store = VectorStoreManager(chat_id)
-    rag_retriever = RAGRetriever(embedding_manager, vector_store)
+    try:
+        print("STEP 1: generate_output started")
 
-    message = get_recent_messages(
-        db=db,
-        chat_id=chat_id,
-        limit=6
-    )
+        embedding_manager = EmbeddingManger()
+        print("STEP 2: EmbeddingManager created")
 
-    conversation_history = ""
-    
-    for msg in reversed(message):
-        conversation_history +=f"""
+        vector_store = VectorStoreManager(chat_id)
+        print("STEP 3: VectorStoreManager created")
+
+        rag_retriever = RAGRetriever(embedding_manager, vector_store)
+        print("STEP 4: Retriever created")
+
+        message = get_recent_messages(
+            db=db,
+            chat_id=chat_id,
+            limit=6
+        )
+        print("STEP 5: Messages fetched")
+
+        conversation_history = ""
+
+        for msg in reversed(message):
+            conversation_history += f"""
 {msg.role}:
 {msg.content}
 
 """
-    standalone_query = rewrite_query(query,conversation_history)
 
-    #1. results
-    results = rag_retriever.retrieve(standalone_query, top_k)
+        standalone_query = rewrite_query(query, conversation_history)
+        print("STEP 6: Query rewritten")
 
-    #2. context
+        results = rag_retriever.retrieve(standalone_query, top_k)
+        print("STEP 7: Retrieval complete")
 
-    seen = set()
-    sources = []
+        # keep your existing context code here
 
-    context = ""
-    for i,doc in enumerate(results):
+        if not context:
+            print("STEP 8: No context found")
+            return {
+                "answer":"No relavent content found for the given query...",
+                "sources":[]
+            }
 
-        source = Path(
-            doc['metadata']['source']
-        ).name
+        print("STEP 9: Context built")
 
-        print(doc['metadata'])
+        prompt = generate_prompt(query, context, conversation_history)
+        print("STEP 10: Prompt generated")
 
-        page = doc['metadata'].get('page')
+        answer = LLM.invoke(prompt)
+        print("STEP 11: LLM response received")
 
-        key = (source,page)
-        
-        if key not in seen:
-            seen.add(key)
-
-            sources.append({
-                "source":source,
-                "page":page if page is not None else 'N/A'
-            })
-
-        context += f"""
-        Document {i+1}
-        {doc["document"]}
-        
-        source:{source}
-        page:{page}
-        """
-    if not context:
         return {
-            "answer":"No relavent content found for the given query...",
-            "sources":[]
+            "answer": answer.content,
+            "sources": sources,
+            "error": None
         }
 
-    #3. prompt
-    prompt = generate_prompt(query, context, conversation_history)
-
-    #4. generate answer 
-    try:
-        answer = LLM.invoke(prompt)
-
-    except RateLimitError:
-        raise HTTPException(
-            status_code=429,
-            detail="Daily AI limit reached. Please try again later."
-        )
-
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=str(e)
-        )
-
-    return {
-        "answer": answer.content,
-        "sources": sources,
-        "error": None
-    }
+        print("RAG ERROR:", str(e))
+        raise
 
 #generate summary
 def generate_summary(db, chat_id):

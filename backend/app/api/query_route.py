@@ -12,6 +12,14 @@ query_router = APIRouter(prefix="/query", tags=['Query'])
 @query_router.post('/query/{chat_id}')
 def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_user: User = Depends(get_current_user)):
 
+    return {
+        "output": {
+            "answer": "QUERY ROUTE TEST",
+            "sources": [],
+            "error": None
+        }
+    }
+
     #save users message
     create_message(
         chat_id=chat_id,

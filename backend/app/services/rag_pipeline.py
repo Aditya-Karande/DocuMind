@@ -1,6 +1,3 @@
-from .embeddings import EmbeddingManger
-from .vector_store import VectorStoreManager
-from .retriever import RAGRetriever
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 import os
@@ -86,6 +83,10 @@ Answer:
 
 #output generation
 def generate_output(db, query, chat_id, top_k=10):
+
+    from .embeddings import EmbeddingManger
+    from .vector_store import VectorStoreManager
+    from .retriever import RAGRetriever
 
     try:
         print("STEP 1: generate_output started")

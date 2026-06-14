@@ -14,14 +14,6 @@ def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_u
 
     from app.services.rag_pipeline import generate_output
 
-    return {
-        "output": {
-            "answer": "QUERY ROUTE TEST",
-            "sources": [],
-            "error": None
-        }
-    }
-
     #save users message
     create_message(
         chat_id=chat_id,

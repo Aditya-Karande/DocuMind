@@ -87,6 +87,12 @@ Answer:
 #output generation
 def generate_output(db, query, chat_id, top_k=10):
 
+    return {
+        "answer": "TEST RESPONSE",
+        "sources": [],
+        "error": None
+    }
+
     try:
         print("STEP 1: generate_output started")
 

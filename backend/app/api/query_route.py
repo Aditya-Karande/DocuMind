@@ -12,6 +12,8 @@ query_router = APIRouter(prefix="/query", tags=['Query'])
 @query_router.post('/query/{chat_id}')
 def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_user: User = Depends(get_current_user)):
 
+    from app.services.rag_pipeline import generate_output
+
     return {
         "output": {
             "answer": "QUERY ROUTE TEST",
@@ -28,7 +30,6 @@ def user_query(chat_id:int, req:Query,db:Session = Depends(get_db),get_current_u
         db=db
     )
     
-    from app.services.rag_pipeline import generate_output
 
     res = generate_output(query=req.req,db=db,chat_id=chat_id)
 

@@ -26,7 +26,9 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     chat_id = Column(Integer, ForeignKey('chats.id'))
     file_name = Column(String, nullable=False)
-    file_path = Column(String, nullable=False)
+    file_path = Column(String, nullable=True)
+    cloudinary_url = Column(String, nullable=True)
+    cloudinary_public_id = Column(String, nullable=True)
     uploaded_at = Column(DateTime, default= datetime.utcnow)
 
 class User(Base):

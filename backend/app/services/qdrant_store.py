@@ -39,7 +39,7 @@ class QdrantStore:
             self.client.create_collection(
                 collection_name=self.COLLECTION_NAME,
                 vectors_config=VectorParams(
-                    size=384, #all-MiniLM-L6-v2
+                    size=1024, #all-MiniLM-L6-v2
                     distance = Distance.COSINE
                 )
             )
@@ -62,7 +62,7 @@ class QdrantStore:
 
         point = PointStruct(
             id=str(uuid.uuid4()),
-            vector=embedding.tolist(),
+            vector=embedding,
             payload={
                 "document": document,
                 **metadata
@@ -80,7 +80,7 @@ class QdrantStore:
         
         results = self.client.query_points(
             collection_name = self.COLLECTION_NAME,
-            query = query_embedding.tolist(),
+            query = query_embedding,
             limit = limit,
             query_filter=Filter(
                 must=[

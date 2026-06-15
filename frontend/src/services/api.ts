@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://documind-backend-2yep.onrender.com';
+const API_BASE_URL = 'https://documind-backend-nwin.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,

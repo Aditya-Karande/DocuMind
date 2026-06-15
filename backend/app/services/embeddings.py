@@ -1,37 +1,47 @@
-print("IMPORTING EMBEDDINGS.PY")
-
-from sentence_transformers import SentenceTransformer
-
-print("SENTENCE TRANSFORMERS IMPORTED")
+import requests
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
 class EmbeddingManger:
-    _model = None
 
-    def __init__(self,model_name="all-MiniLM-L6-v2"):
-        self.model_name = model_name
-        print("Loading Model..",self.model_name)
+    def __init__(self):
 
-        if EmbeddingManger._model is None:   
-            print("Loading model for first time.")
-            EmbeddingManger._model = SentenceTransformer(model_name)
-        
-        self.model = EmbeddingManger._model
-        print("Model Dimensions: ",self.model.get_embedding_dimension())
+        load_dotenv(
+            Path(__file__).resolve().parents[2] / ".env"
+        )
+        self.api_key = os.getenv("JINA_API_KEY")
 
-    def create_embeddings(self, texts):
-        batch_size = 16
-        all_embeddings = []
+        if not self.api_key:
+            raise ValueError("JINA_API_KEY not found")
 
-        for i in range(0, len(texts), batch_size):
+    def create_embeddings(self, text):
 
-            batch = texts[i:i + batch_size]
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
 
-            embeddings = self.model.encode(
-                batch,
-                show_progress_bar=False
-            )
+        payload = {
+            "model": "jina-embeddings-v3",
+            "input": text
+        }
 
-            all_embeddings.extend(embeddings)
+        response = requests.post(
+            "https://api.jina.ai/v1/embeddings",
+            headers=headers,
+            json=payload
+        )
 
-        return all_embeddings
+        response.raise_for_status()
+
+        result = response.json()
+
+        if isinstance(text, str):
+            return result["data"][0]["embedding"]
+
+        return [
+            item["embedding"]
+            for item in result["data"]
+        ]
     

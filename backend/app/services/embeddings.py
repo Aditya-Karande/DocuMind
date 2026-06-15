@@ -18,8 +18,20 @@ class EmbeddingManger:
         self.model = EmbeddingManger._model
         print("Model Dimensions: ",self.model.get_embedding_dimension())
 
-    def create_embeddings(self, text):
-        embeddings = self.model.encode(text, show_progress_bar=True)
-        print("Shape of Embeddings: ",embeddings.shape)
-        return embeddings
+    def create_embeddings(self, texts):
+        batch_size = 16
+        all_embeddings = []
+
+        for i in range(0, len(texts), batch_size):
+
+            batch = texts[i:i + batch_size]
+
+            embeddings = self.model.encode(
+                batch,
+                show_progress_bar=False
+            )
+
+            all_embeddings.extend(embeddings)
+
+        return all_embeddings
     

@@ -157,3 +157,33 @@ class QdrantStore:
         print(
             f"Added {len(documents)} chunks to Qdrant"
         )
+
+    def get_all_docs(self):
+
+        results = self.client.scroll(
+            collection_name=self.COLLECTION_NAME,
+            scroll_filter=Filter(
+                must=[
+                    FieldCondition(
+                        key="chat_id",
+                        match=MatchValue(
+                            value=self.chat_id
+                        )
+                    )
+                ]
+            ),
+            limit=10000
+        )
+
+        points = results[0]
+
+        docs = []
+
+        for point in points:
+
+            docs.append({
+                "document": point.payload["document"],
+                "metadata": point.payload
+            })
+
+        return docs

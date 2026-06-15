@@ -81,6 +81,9 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
             docuemnt_id=document.id,
             file_path=FILE_PATH
         )
+
+        if FILE_PATH.exists():
+            FILE_PATH.unlink()
     
         # create_document(
         #     db=db,

@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from app.database.curd import get_document,get_one_document, delete_document
 from sqlalchemy.orm import Session
 from app.database.connection import get_db
-from app.services.vector_store import VectorStoreManager
 import os
 from app.database.models import User
 from app.services.oauth2 import get_current_user

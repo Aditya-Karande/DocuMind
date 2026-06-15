@@ -85,7 +85,7 @@ Answer:
 def generate_output(db, query, chat_id, top_k=10):
 
     from .embeddings import EmbeddingManger
-    from .vector_store import VectorStoreManager
+    from .qdrant_store import QdrantStore
     from .retriever import RAGRetriever
 
     try:
@@ -94,7 +94,8 @@ def generate_output(db, query, chat_id, top_k=10):
         embedding_manager = EmbeddingManger()
         print("STEP 2: EmbeddingManager created")
 
-        vector_store = VectorStoreManager(chat_id)
+        vector_store = QdrantStore()
+        vector_store.chat_id = chat_id
         print("STEP 3: VectorStoreManager created")
 
         rag_retriever = RAGRetriever(
@@ -204,9 +205,10 @@ page:{page}
 #generate summary
 def generate_summary(db, chat_id):
 
-    from .vector_store import VectorStoreManager
+    from .qdrant_store import QdrantStore
 
-    vector_store = VectorStoreManager(chat_id=chat_id)
+    vector_store = QdrantStore()
+    vector_store.chat_id = chat_id
 
     #get all chunks directly (no query.)
     all_docs = vector_store.get_all_docs()
@@ -269,9 +271,11 @@ Summary:
 #generate quiz
 def generate_quiz(db, chat_id, num_questions=5):
 
-    from .vector_store import VectorStoreManager
+    from .qdrant_store import QdrantStore
 
-    vector_store = VectorStoreManager(chat_id)
+    vector_store = QdrantStore()
+    vector_store.chat_id = chat_id
+    
     all_docs = vector_store.get_all_docs()
     all_text = "\n".join([doc["document"] for doc in all_docs])
 

@@ -6,6 +6,8 @@ from app.services.vector_store import VectorStoreManager
 import os
 from app.database.models import User
 from app.services.oauth2 import get_current_user
+from app.services.qdrant_store import QdrantStore
+from app.services.cloudinary_service import delete_file_from_cloudinary
 
 doc_router = APIRouter(prefix='/documents', tags=['Documents'])
 
@@ -30,9 +32,13 @@ def delete_document_db(doc_id:int,db:Session = Depends(get_db), get_current_user
             detail="Document not found"
         )
     
-    vector_store = VectorStoreManager(doc.chat_id)
+    qdrant_store = QdrantStore()
 
-    vector_store.delete_embedding(doc.file_path)
+    qdrant_store.delete_document(doc.id)
+
+    delete_file_from_cloudinary(
+        doc.cloudinary_public_id
+    )
     
     if os.path.exists(doc.file_path):
         os.remove(doc.file_path)

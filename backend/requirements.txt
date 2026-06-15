@@ -22,3 +22,4 @@ bcrypt==4.0.1
 python-jose
 groq
 cloudinary
+qdrant-client

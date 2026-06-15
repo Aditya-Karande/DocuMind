@@ -67,12 +67,7 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
 
         from app.services.upload_pipeline import process_documents
 
-        process_documents(
-            chat_id= chat_id,
-            file_path=FILE_PATH
-        )
-    
-        create_document(
+        document = create_document(
             db=db,
             chat_id=chat_id,
             filename=file.filename,
@@ -80,6 +75,21 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
             cloudinary_url=cloudinary_url,
             cloudinary_public_id=cloudinary_public_id
         )
+
+        process_documents(
+            chat_id= chat_id,
+            docuemnt_id=document.id,
+            file_path=FILE_PATH
+        )
+    
+        # create_document(
+        #     db=db,
+        #     chat_id=chat_id,
+        #     filename=file.filename,
+        #     filepath=str(FILE_PATH),
+        #     cloudinary_url=cloudinary_url,
+        #     cloudinary_public_id=cloudinary_public_id
+        # )
 
     except Exception as e:
 

@@ -46,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
     try {
       await api.deleteChat(id);
       setChats(chats.filter((c) => c.id !== id));
-      if (chatId === id) {
+      if (String(chatId) === String(id)) {
         navigate('/new');
       }
     } catch (error) {

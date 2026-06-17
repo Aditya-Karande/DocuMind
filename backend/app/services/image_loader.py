@@ -12,7 +12,7 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 
 client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
+    api_key=os.getenv("API_KEY")
 )
 
 def image_to_base64(file_path):

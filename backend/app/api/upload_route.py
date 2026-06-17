@@ -6,7 +6,6 @@ from app.database.connection import get_db
 from sqlalchemy.orm import Session
 from app.database.models import User
 from app.services.oauth2 import get_current_user
-from app.services.cloudinary_service import upload_file_to_cloudinary
 
 upload_router = APIRouter(prefix="/upload",tags=['Upload'])
 
@@ -56,12 +55,6 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
     with open(FILE_PATH, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
-    cloudinary_result = upload_file_to_cloudinary(
-        str(FILE_PATH)
-    )
-
-    cloudinary_url = cloudinary_result["url"]
-    cloudinary_public_id = cloudinary_result["public_id"]
 
     try:
 
@@ -72,8 +65,6 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
             chat_id=chat_id,
             filename=file.filename,
             filepath=str(FILE_PATH),
-            cloudinary_url=cloudinary_url,
-            cloudinary_public_id=cloudinary_public_id
         )
 
         process_documents(
@@ -90,8 +81,6 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
         #     chat_id=chat_id,
         #     filename=file.filename,
         #     filepath=str(FILE_PATH),
-        #     cloudinary_url=cloudinary_url,
-        #     cloudinary_public_id=cloudinary_public_id
         # )
 
     except Exception as e:
@@ -101,7 +90,7 @@ async def upload_pdf(chat_id:int, file: UploadFile = File(...),db:Session = Depe
         
         raise HTTPException(
             status_code= 500,
-            detail=f"Document processing failed: {len(e)} "
+            detail=f"Document processing failed: {str(e)} "
         )
     
 

@@ -93,13 +93,12 @@ def get_recent_messages(db,chat_id,limit=6):
     )
 
 #create document
-def create_document(db, chat_id, filename, filepath, cloudinary_url, cloudinary_public_id):
+def create_document(db, chat_id, filename, filepath):
     doc = Document(
         chat_id = chat_id,
         file_name = filename,
         file_path = filepath,
-        cloudinary_url = cloudinary_url,
-        cloudinary_public_id = cloudinary_public_id
+
     )
 
     db.add(doc)

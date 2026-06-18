@@ -23,9 +23,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = useCallback(async (email: string, password: string) => {
     const response = await api.login(email, password);
-    const { access_token } = response.data;
+    const { access_token, user: responseUser } = response.data;
+
     localStorage.setItem('token', access_token);
     setToken(access_token);
+
+    // Prefer user object from response; fall back to decoding the JWT payload
+    if (responseUser) {
+      localStorage.setItem('user', JSON.stringify(responseUser));
+      setUser(responseUser);
+    } else {
+      try {
+        const payload = JSON.parse(atob(access_token.split('.')[1]));
+        const decoded: User = {
+          id: payload.sub ?? payload.id ?? '',
+          name: payload.name ?? payload.username ?? '',
+          email: payload.email ?? email,
+        };
+        localStorage.setItem('user', JSON.stringify(decoded));
+        setUser(decoded);
+      } catch {
+        // JWT decode failed — store minimal user so name never falls back to "User"
+        const fallback: User = { id: '', name: '', email };
+        localStorage.setItem('user', JSON.stringify(fallback));
+        setUser(fallback);
+      }
+    }
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {

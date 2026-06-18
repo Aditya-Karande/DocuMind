@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite default port
+    allow_origins=["https://docu-mind-six-dun.vercel.app","http://localhost:5173"],  # Vite default port
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

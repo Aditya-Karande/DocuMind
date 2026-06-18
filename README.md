@@ -2,7 +2,7 @@
 
 > A RAG-based multi-document assistant that enables users to upload PDFs, DOCX, PPTX, and image-based documents, ask questions, generate summaries, create quizzes, and receive citation-supported answers using modern AI technologies.
 
-![Architecture](screenshots/DocuMind_architecture.jpeg)
+![Architecture](screenshots/DocuMind_architecture.jpg)
 
 ---
 

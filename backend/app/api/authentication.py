@@ -29,7 +29,7 @@ def login(req:OAuth2PasswordRequestForm = Depends(), db:Session = Depends(get_db
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.email, "name": user.name, "id": str(user.id)},
+        data={"sub": user.email, "name": user.username, "id": str(user.id)},
         expires_delta=access_token_expires
     )
 
@@ -38,7 +38,7 @@ def login(req:OAuth2PasswordRequestForm = Depends(), db:Session = Depends(get_db
         "token_type": "Bearer",
         "user": {
             "id": str(user.id),
-            "name": user.name,
+            "name": user.username,
             "email": user.email,
         }
     }

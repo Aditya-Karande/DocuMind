@@ -8,13 +8,13 @@
 
 ## 🔗 Links
 
-🌐 Live Demo: [YOUR_VERCEL_URL](https://docu-mind-six-dun.vercel.app/)
+🌐 Live Demo: [VERCEL_URL](https://docu-mind-six-dun.vercel.app/)
 
-⚙️ Backend API: [YOUR_RENDER_URL](https://documind-backend-nwin.onrender.com/)
+⚙️ Backend API: [RENDER_URL](https://documind-backend-nwin.onrender.com/)
 
-📖 API Documentation: [YOUR_RENDER_URL/docs](https://documind-backend-nwin.onrender.com/docs)
+📖 API Documentation: [RENDER_URL/docs](https://documind-backend-nwin.onrender.com/docs)
 
-🎥 Demo Video: [YOUR_GOOGLE_DRIVE_LINK](https://drive.google.com/file/d/14SnvNDDPAa8QfxJDFi3YOU9MuwF3y_uC/view?usp=drive_link)
+🎥 Demo Video: [GOOGLE_DRIVE_LINK](https://drive.google.com/file/d/14SnvNDDPAa8QfxJDFi3YOU9MuwF3y_uC/view?usp=drive_link)
 
 ---
 
@@ -326,8 +326,9 @@ DocuMind/
 │   ├── DocuMind_quiz.png
 │   └── DocuMind_architecture.jpeg
 │
+├── README.md
 │
-└── README.md
+└── .gitignore
 ```
 
 ---

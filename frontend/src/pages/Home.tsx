@@ -324,39 +324,46 @@ const Home: React.FC = () => {
             <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.4)' }}>Three steps from document to insight</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, position: 'relative' }}>
-            {/* connector line */}
-            <div aria-hidden="true" style={{
-              position: 'absolute',
-              top: 28,
-              left: 'calc(16.6% + 22px)',
-              right: 'calc(16.6% + 22px)',
-              height: 1,
-              background: 'linear-gradient(90deg, rgba(56,100,255,0.4), rgba(110,231,247,0.4))',
-            }} />
-
+          {/* Steps — flexbox so we can place arrows between items */}
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 0 }}>
             {[
               { icon: <Upload size={24} color="#7aa4ff" />, label: 'Upload', desc: 'Drop a PDF, Word doc, or text file', n: '01', bg: 'rgba(56,100,255,0.12)', border: 'rgba(56,100,255,0.22)' },
               { icon: <Zap size={24} color="#4de8a8" />, label: 'Process', desc: 'AI indexes and understands your content', n: '02', bg: 'rgba(20,200,120,0.12)', border: 'rgba(20,200,120,0.22)' },
               { icon: <MessageSquare size={24} color="#c084fc" />, label: 'Interact', desc: 'Chat, summarize, or quiz — instantly', n: '03', bg: 'rgba(160,90,255,0.12)', border: 'rgba(160,90,255,0.22)' },
-            ].map(({ icon, label, desc, n, bg, border }) => (
-              <div key={n} style={{ textAlign: 'center', padding: '0 24px' }}>
-                <div style={{
-                  width: 56, height: 56,
-                  background: bg,
-                  border: `1px solid ${border}`,
-                  borderRadius: 14,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 20px',
-                  position: 'relative',
-                  zIndex: 1,
-                }}>
-                  {icon}
+            ].map(({ icon, label, desc, n, bg, border }, i, arr) => (
+              <React.Fragment key={n}>
+                <div style={{ flex: 1, textAlign: 'center', padding: '0 16px' }}>
+                  <div style={{
+                    width: 56, height: 56,
+                    background: bg,
+                    border: `1px solid ${border}`,
+                    borderRadius: 14,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    margin: '0 auto 20px',
+                  }}>
+                    {icon}
+                  </div>
+                  <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '1px', color: 'rgba(255,255,255,0.25)', marginBottom: 8 }}>{n}</p>
+                  <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{label}</h3>
+                  <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{desc}</p>
                 </div>
-                <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '1px', color: 'rgba(255,255,255,0.25)', marginBottom: 8 }}>{n}</p>
-                <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{label}</h3>
-                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{desc}</p>
-              </div>
+                {/* Arrow connector between steps — not after last */}
+                {i < arr.length - 1 && (
+                  <div aria-hidden="true" style={{
+                    display: 'flex', alignItems: 'center',
+                    paddingTop: 16,
+                    flexShrink: 0,
+                    width: 48,
+                  }}>
+                    <div style={{
+                      width: '100%', height: 1,
+                      background: 'linear-gradient(90deg, rgba(56,100,255,0.5), rgba(110,231,247,0.4))',
+                      maskImage: 'repeating-linear-gradient(90deg, black 0px, black 5px, transparent 5px, transparent 10px)',
+                      WebkitMaskImage: 'repeating-linear-gradient(90deg, black 0px, black 5px, transparent 5px, transparent 10px)',
+                    }} />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
         </section>

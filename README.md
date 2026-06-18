@@ -6,6 +6,18 @@
 
 ---
 
+## 🔗 Links
+
+🌐 Live Demo: [YOUR_VERCEL_URL](https://docu-mind-six-dun.vercel.app/)
+
+⚙️ Backend API: [YOUR_RENDER_URL](https://documind-backend-nwin.onrender.com/)
+
+📖 API Documentation: [YOUR_RENDER_URL/docs](https://documind-backend-nwin.onrender.com/docs)
+
+🎥 Demo Video: [YOUR_GOOGLE_DRIVE_LINK](https://drive.google.com/file/d/14SnvNDDPAa8QfxJDFi3YOU9MuwF3y_uC/view?usp=drive_link)
+
+---
+
 ## 🚀 Features
 
 ### 📄 Multi-Document Upload
@@ -53,8 +65,10 @@
 - Extracts text from:
   - Scanned PDFs
   - Images
-  - Handwritten notes
-- Powered by EasyOCR.
+  - Screenshots
+  - Image-Based Documents
+- Powered by Groq Vision OCR.
+- Supports cloud-based OCR without local OCR models.
 
 ---
 
@@ -68,31 +82,48 @@ Frontend (React + TypeScript)
         ▼
 Backend (FastAPI)
         │
- ┌──────┼──────┐
- ▼      ▼      ▼
-PostgreSQL  File Storage  ChromaDB
-                │
-                ▼
-       Document Processing
-      (OCR → Extraction → Chunking)
-                │
-                ▼
-       Sentence Transformers
-                │
-                ▼
-           ChromaDB
-                │
-                ▼
-         Retriever
-                │
-                ▼
-       Prompt Builder
-                │
-                ▼
-      Groq Llama 3.3 70B
-                │
-                ▼
-     Answer + Citations
+ ┌──────┼─────────────┐
+ ▼                    ▼
+Neon PostgreSQL   Document Processing
+                       │
+                       ▼
+                Groq Vision OCR
+                       │
+                       ▼
+                Text Extraction
+                       │
+                       ▼
+                    Chunking
+                       │
+                       ▼
+              Jina Embeddings API
+                       │
+                       ▼
+                 Qdrant Cloud
+                       │
+                       ▼
+                 Qdrant Retriever
+                       │
+                       ▼
+                Relevant Chunks
+                       │
+                       ▼
+               Citation Generator
+                       │
+                       ▼
+                 Context Builder
+                       │
+                       ▼
+              Conversation History
+                       │
+                       ▼
+                 Prompt Builder
+                       │
+                       ▼
+         Groq Llama 3.3 70B Versatile
+                       │
+                       ▼
+             Answer + Citations
 ```
 
 ---
@@ -120,23 +151,37 @@ PostgreSQL  File Storage  ChromaDB
 
 - LangChain
 - RecursiveCharacterTextSplitter
-- Sentence Transformers
-- ChromaDB
+- Jina Embeddings API
+- Qdrant Cloud
 - Groq API
 - Llama 3.3 70B Versatile
 
 ## OCR & Document Processing
 
-- EasyOCR
+- Groq Vision OCR
 - PyMuPDF
-- pdf2image
 - docx2txt
 - python-pptx
 - unstructured
 
-## Database
+## Databases
 
-- PostgreSQL
+### Neon PostgreSQL
+
+Stores:
+
+- Users
+- Chats
+- Messages
+- Document Metadata
+
+### Qdrant Cloud
+
+Stores:
+
+- Embeddings
+- Document Chunks
+- Metadata References
 
 ---
 
@@ -144,29 +189,33 @@ PostgreSQL  File Storage  ChromaDB
 
 ```text
 User Query
-     │
-     ▼
-Conversation History
-     │
-     ▼
-Retriever
-     │
-     ▼
-ChromaDB
-     │
-     ▼
+      │
+      ▼
+Query Embedding
+(Jina Embeddings API)
+      │
+      ▼
+Qdrant Retrieval
+      │
+      ▼
 Relevant Chunks
-     │
-     ▼
+      │
+      ▼
 Citation Generator
-     │
-     ▼
+      │
+      ▼
+Context Builder
+      │
+      ▼
+Conversation History
+      │
+      ▼
 Prompt Builder
-     │
-     ▼
-Groq Llama 3.3 70B
-     │
-     ▼
+      │
+      ▼
+Groq Llama 3.3 70B Versatile
+      │
+      ▼
 Answer + Citations
 ```
 
@@ -175,22 +224,22 @@ Answer + Citations
 # 📦 Document Processing Pipeline
 
 ```text
-PDF / DOCX / PPTX / Images
-            │
-            ▼
-       OCR (EasyOCR)
-            │
-            ▼
-      Text Extraction
-            │
-            ▼
-          Chunking
-            │
-            ▼
-Sentence Transformers
-            │
-            ▼
-         ChromaDB
+PDF / DOCX / PPTX / TXT / Images
+               │
+               ▼
+       Groq Vision OCR
+               │
+               ▼
+       Text Extraction
+               │
+               ▼
+           Chunking
+               │
+               ▼
+     Jina Embeddings API
+               │
+               ▼
+         Qdrant Cloud
 ```
 
 ---
@@ -277,8 +326,6 @@ DocuMind/
 │   ├── DocuMind_quiz.png
 │   └── DocuMind_architecture.jpeg
 │
-├── demo/
-│   └── DocuMind_demo.mp4
 │
 └── README.md
 ```
@@ -316,9 +363,15 @@ Create a `.env` file:
 ```env
 GROQ_API_KEY=your_groq_api_key
 
-DATABASE_URL=your_postgresql_url
+JINA_API_KEY=your_jina_api_key
 
-SECRET_KEY=your_secret_key
+DATABASE_URL=your_neon_database_url
+
+QDRANT_URL=your_qdrant_url
+
+QDRANT_API_KEY=your_qdrant_api_key
+
+JWT_SECRET_KEY=your_jwt_secret_key
 ```
 
 ---
@@ -383,14 +436,14 @@ Protected Routes
 # 🌟 Future Improvements
 
 - Web Search Integration
+- Hybrid Search (Keyword + Semantic)
 - Multi-Modal RAG
-- PDF Annotation Support
 - Team Workspaces
 - Document Sharing
-- Hybrid Search (Keyword + Semantic)
 - Streaming Responses
 - Voice-Based Queries
 - Advanced Analytics Dashboard
+- PDF Annotation Support
 
 ---
 
@@ -398,15 +451,17 @@ Protected Routes
 
 **Aditya Karande**
 
-AI / Data Science Engineering Student
+AI & Data Science Engineering Student
 
 Built with:
-- React
+
+- React + TypeScript
 - FastAPI
-- PostgreSQL
-- ChromaDB
-- Sentence Transformers
-- Groq Llama 3.3 70B
+- Neon PostgreSQL
+- Qdrant Cloud
+- Jina Embeddings API
+- Groq Vision OCR
+- Groq Llama 3.3 70B Versatile
 
 ---
 

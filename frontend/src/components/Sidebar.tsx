@@ -73,7 +73,8 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
     setMenuOpen(null);
   };
 
-  const username = localStorage.getItem('username') || 'User';
+  const storedUser = localStorage.getItem('user');
+  const username = storedUser ? (JSON.parse(storedUser).name || 'User') : 'User';
 
   return (
     <div className="w-80 h-full bg-gray-950/80 backdrop-blur-sm border-r border-gray-800/50 flex flex-col overflow-hidden relative">
@@ -213,11 +214,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onNewChat }) => {
         <div className="flex items-center gap-3 mb-3 p-3 rounded-xl glass-card bg-gray-900/50">
           <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20">
             <span className="text-white text-sm font-bold">
-              {user?.username?.charAt(0)?.toUpperCase() || username?.charAt(0)?.toUpperCase() || 'U'}
+              {user?.name?.charAt(0)?.toUpperCase() || username?.charAt(0)?.toUpperCase() || 'U'}
             </span>
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">{user?.username || username}</p>
+            <p className="text-sm font-medium text-white truncate">{user?.name || username}</p>
             <p className="text-xs text-gray-500">Pro Member</p>
           </div>
         </div>

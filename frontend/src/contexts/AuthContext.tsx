@@ -30,14 +30,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     // Prefer user object from response; fall back to decoding the JWT payload
     if (responseUser) {
-      localStorage.setItem('user', JSON.stringify(responseUser));
-      setUser(responseUser);
+      // Backend uses "username" field — normalize to "name" for the frontend
+      const normalized: User = {
+        id: responseUser.id ?? '',
+        name: responseUser.username ?? responseUser.name ?? '',
+        email: responseUser.email ?? email,
+      };
+      localStorage.setItem('user', JSON.stringify(normalized));
+      setUser(normalized);
     } else {
       try {
         const payload = JSON.parse(atob(access_token.split('.')[1]));
         const decoded: User = {
           id: payload.sub ?? payload.id ?? '',
-          name: payload.name ?? payload.username ?? '',
+          name: payload.username ?? payload.name ?? '',
           email: payload.email ?? email,
         };
         localStorage.setItem('user', JSON.stringify(decoded));

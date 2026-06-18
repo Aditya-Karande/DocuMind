@@ -26,11 +26,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { access_token } = response.data;
     localStorage.setItem('token', access_token);
     setToken(access_token);
-
-    // fetch user info after login
-    const userRes = await api.getMe();
-    localStorage.setItem('username', userRes.data.username);
-    setUser(userRes.data);
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {

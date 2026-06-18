@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Zap,
   Shield,
+  Globe,
 } from 'lucide-react';
 
 const Home: React.FC = () => {
@@ -23,269 +24,547 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen" style={{
-  background: 'radial-gradient(ellipse at 20% 50%, rgba(30, 58, 138, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(88, 28, 135, 0.2) 0%, transparent 50%), #080d1a'
-}}>
-      {/* Hero Section */}
-      <div className="relative overflow-hidden">
+    <div className="min-h-screen" style={{ background: '#080c14' }}>
+      {/* Ambient glow layer — fixed, covers the whole page */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          pointerEvents: 'none',
+          zIndex: 0,
+          overflow: 'hidden',
+        }}
+      >
+        {/* Top-center hero glow */}
+        <div style={{
+          position: 'absolute',
+          top: '-10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '900px',
+          height: '700px',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(56,100,255,0.13) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }} />
+        {/* Features section glow — left */}
+        <div style={{
+          position: 'absolute',
+          top: '50%',
+          left: '-10%',
+          width: '600px',
+          height: '600px',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(124,58,237,0.10) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+        }} />
+        {/* Bottom glow — right */}
+        <div style={{
+          position: 'absolute',
+          bottom: '10%',
+          right: '-5%',
+          width: '500px',
+          height: '500px',
+          borderRadius: '50%',
+          background: 'radial-gradient(ellipse, rgba(56,100,255,0.09) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+        }} />
+      </div>
 
-        {/* Navigation */}
-        <nav className="relative z-10 flex items-center justify-between px-6 lg:px-12 py-6">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-              <Brain size={22} className="text-white" />
+      {/* Everything on top of the glow layer */}
+      <div style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* ── Navigation ── */}
+        <nav style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '24px 48px',
+          borderBottom: '1px solid rgba(255,255,255,0.05)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{
+              width: 38, height: 38,
+              background: 'linear-gradient(135deg, #3864ff 0%, #6ee7f7 100%)',
+              borderRadius: 10,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 0 20px rgba(56,100,255,0.35)',
+            }}>
+              <Brain size={20} color="#fff" />
             </div>
-            <span className="text-xl font-bold text-white">DocuMind</span>
+            <span style={{ fontSize: 18, fontWeight: 600, color: '#fff', letterSpacing: '-0.3px' }}>DocuMind</span>
           </div>
-          <div className="flex items-center gap-4">
-            <Link
-              to="/login"
-              className="px-4 py-2 text-gray-300 hover:text-white transition-colors"
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Link to="/login" style={{
+              padding: '8px 16px',
+              color: 'rgba(255,255,255,0.55)',
+              fontSize: 14,
+              fontWeight: 500,
+              textDecoration: 'none',
+              borderRadius: 8,
+              transition: 'color 0.15s',
+            }}
+              onMouseEnter={e => (e.currentTarget.style.color = '#fff')}
+              onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.55)')}
             >
-              Sign In
+              Sign in
             </Link>
-            <Link
-              to="/register"
-              className="px-5 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-medium rounded-lg transition-all shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40"
+            <Link to="/register" style={{
+              padding: '8px 18px',
+              background: 'linear-gradient(135deg, #3864ff, #5aa0ff)',
+              color: '#fff',
+              fontSize: 14,
+              fontWeight: 500,
+              textDecoration: 'none',
+              borderRadius: 8,
+              boxShadow: '0 0 16px rgba(56,100,255,0.3)',
+              transition: 'box-shadow 0.2s, opacity 0.2s',
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 28px rgba(56,100,255,0.55)'; (e.currentTarget as HTMLElement).style.opacity = '0.9'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.boxShadow = '0 0 16px rgba(56,100,255,0.3)'; (e.currentTarget as HTMLElement).style.opacity = '1'; }}
             >
-              Get Started
+              Get started
             </Link>
           </div>
         </nav>
 
-        {/* Hero Content */}
-        <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-12 pt-20 pb-32 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-sm mb-8">
-            <Sparkles size={16} />
-            <span>AI-powered document intelligence</span>
+        {/* ── Hero ── */}
+        <section style={{ maxWidth: 760, margin: '0 auto', padding: '120px 24px 100px', textAlign: 'center' }}>
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 7,
+            padding: '6px 14px',
+            background: 'rgba(56,100,255,0.10)',
+            border: '1px solid rgba(56,100,255,0.22)',
+            borderRadius: 100,
+            marginBottom: 32,
+          }}>
+            <Sparkles size={13} color="#7aa4ff" />
+            <span style={{ fontSize: 13, color: '#7aa4ff', fontWeight: 500 }}>AI-powered document intelligence</span>
           </div>
 
-          <h1 className="text-5xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-            Chat with your
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">
-              Documents
-            </span>
+          <h1 style={{
+            fontSize: 'clamp(44px, 7vw, 76px)',
+            fontWeight: 700,
+            color: '#fff',
+            lineHeight: 1.08,
+            letterSpacing: '-2px',
+            marginBottom: 24,
+          }}>
+            Chat with your<br />
+            <span style={{
+              background: 'linear-gradient(100deg, #5a8fff 0%, #7ee8fa 60%, #a5f3c8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>documents</span>
           </h1>
 
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
+          <p style={{
+            fontSize: 18,
+            color: 'rgba(255,255,255,0.45)',
+            lineHeight: 1.7,
+            maxWidth: 520,
+            margin: '0 auto 44px',
+          }}>
             Upload any document and have intelligent conversations. Get instant answers,
             generate summaries, and create quizzes powered by advanced AI.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/register"
-              className="group flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold rounded-xl transition-all shadow-xl shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-105"
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <Link to="/register" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '13px 28px',
+              background: 'linear-gradient(135deg, #3864ff, #5aa0ff)',
+              color: '#fff',
+              fontWeight: 600,
+              fontSize: 15,
+              textDecoration: 'none',
+              borderRadius: 10,
+              boxShadow: '0 0 32px rgba(56,100,255,0.35)',
+              transition: 'transform 0.15s, box-shadow 0.15s',
+            }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(-1px)'; el.style.boxShadow = '0 0 44px rgba(56,100,255,0.5)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'none'; el.style.boxShadow = '0 0 32px rgba(56,100,255,0.35)'; }}
             >
-              Start Free
-              <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+              Start free
+              <ArrowRight size={17} />
             </Link>
-            <Link
-              to="/login"
-              className="flex items-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-medium rounded-xl border border-white/10 transition-all"
+            <Link to="/login" style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '13px 28px',
+              background: 'rgba(255,255,255,0.05)',
+              color: 'rgba(255,255,255,0.7)',
+              fontWeight: 500,
+              fontSize: 15,
+              textDecoration: 'none',
+              borderRadius: 10,
+              border: '1px solid rgba(255,255,255,0.09)',
+              transition: 'background 0.15s, color 0.15s',
+            }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.09)'; el.style.color = '#fff'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = 'rgba(255,255,255,0.05)'; el.style.color = 'rgba(255,255,255,0.7)'; }}
             >
-              Sign In
+              Sign in
             </Link>
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Features Section */}
-      <div className="relative py-24 border-t border-gray-800/50">
-        <div className="max-w-6xl mx-auto px-6 lg:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-              Everything you need to understand your documents
+        {/* ── Features ── */}
+        <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 120px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 64 }}>
+            <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(56,100,255,0.7)', marginBottom: 14 }}>CAPABILITIES</p>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: '#fff', letterSpacing: '-1px', marginBottom: 16 }}>
+              Everything you need to understand<br />your documents
             </h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Powerful AI tools designed to help you extract insights from any document format
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.4)', maxWidth: 440, margin: '0 auto' }}>
+              Powerful AI tools to extract insights from any document format
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {/* Feature 1 */}
-            <div className="group p-8 bg-gray-800/50 hover:bg-gray-800 rounded-2xl border border-gray-700/50 hover:border-blue-500/50 transition-all">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/25">
-                <MessageSquare size={28} className="text-white" />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
+            {/* Card 1 */}
+            <div style={{
+              padding: '32px 28px',
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              borderRadius: 16,
+              transition: 'border-color 0.2s, background 0.2s',
+            }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(56,100,255,0.3)'; el.style.background = 'rgba(56,100,255,0.05)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.03)'; }}
+            >
+              <div style={{
+                width: 44, height: 44,
+                background: 'rgba(56,100,255,0.15)',
+                border: '1px solid rgba(56,100,255,0.25)',
+                borderRadius: 12,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 20,
+              }}>
+                <MessageSquare size={22} color="#7aa4ff" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Smart Chat</h3>
-              <p className="text-gray-400">
+              <h3 style={{ fontSize: 17, fontWeight: 600, color: '#fff', marginBottom: 10 }}>Smart chat</h3>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>
                 Ask questions in natural language and get accurate answers with source citations from your documents.
               </p>
             </div>
 
-            {/* Feature 2 */}
-            <div className="group p-8 bg-gray-800/50 hover:bg-gray-800 rounded-2xl border border-gray-700/50 hover:border-green-500/50 transition-all">
-              <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-green-500/25">
-                <FileText size={28} className="text-white" />
+            {/* Card 2 */}
+            <div style={{
+              padding: '32px 28px',
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              borderRadius: 16,
+              transition: 'border-color 0.2s, background 0.2s',
+            }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(20,200,120,0.3)'; el.style.background = 'rgba(20,200,120,0.04)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.03)'; }}
+            >
+              <div style={{
+                width: 44, height: 44,
+                background: 'rgba(20,200,120,0.12)',
+                border: '1px solid rgba(20,200,120,0.22)',
+                borderRadius: 12,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 20,
+              }}>
+                <FileText size={22} color="#4de8a8" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Auto Summaries</h3>
-              <p className="text-gray-400">
+              <h3 style={{ fontSize: 17, fontWeight: 600, color: '#fff', marginBottom: 10 }}>Auto summaries</h3>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>
                 Generate comprehensive summaries of lengthy documents in seconds. Save hours of reading time.
               </p>
             </div>
 
-            {/* Feature 3 */}
-            <div className="group p-8 bg-gray-800/50 hover:bg-gray-800 rounded-2xl border border-gray-700/50 hover:border-purple-500/50 transition-all">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-violet-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/25">
-                <Brain size={28} className="text-white" />
+            {/* Card 3 */}
+            <div style={{
+              padding: '32px 28px',
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.07)',
+              borderRadius: 16,
+              transition: 'border-color 0.2s, background 0.2s',
+            }}
+              onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(160,90,255,0.3)'; el.style.background = 'rgba(160,90,255,0.04)'; }}
+              onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'rgba(255,255,255,0.07)'; el.style.background = 'rgba(255,255,255,0.03)'; }}
+            >
+              <div style={{
+                width: 44, height: 44,
+                background: 'rgba(160,90,255,0.12)',
+                border: '1px solid rgba(160,90,255,0.22)',
+                borderRadius: 12,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 20,
+              }}>
+                <Brain size={22} color="#c084fc" />
               </div>
-              <h3 className="text-xl font-semibold text-white mb-3">Quiz Generator</h3>
-              <p className="text-gray-400">
+              <h3 style={{ fontSize: 17, fontWeight: 600, color: '#fff', marginBottom: 10 }}>Quiz generator</h3>
+              <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65 }}>
                 Create interactive quizzes from your documents to test knowledge and improve retention.
               </p>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* How It Works Section */}
-      <div className="py-24 border-t border-gray-800/50">
-        <div className="max-w-6xl mx-auto px-6 lg:px-12">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+        {/* ── How it works ── */}
+        <section style={{ maxWidth: 860, margin: '0 auto', padding: '0 24px 120px' }}>
+          {/* Thin divider line with gradient fade */}
+          <div style={{
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(56,100,255,0.25), transparent)',
+            marginBottom: 80,
+          }} />
+
+          <div style={{ textAlign: 'center', marginBottom: 64 }}>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: '#fff', letterSpacing: '-1px', marginBottom: 12 }}>
               Simple. Fast. Intelligent.
             </h2>
+            <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.4)' }}>Three steps from document to insight</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Upload size={32} className="text-blue-400" />
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">1</div>
-              <h3 className="text-xl font-semibold text-white mb-2">Upload</h3>
-              <p className="text-gray-400">Upload your documents in any format - PDF, Word, or text files</p>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, position: 'relative' }}>
+            {/* connector line */}
+            <div aria-hidden="true" style={{
+              position: 'absolute',
+              top: 28,
+              left: 'calc(16.6% + 22px)',
+              right: 'calc(16.6% + 22px)',
+              height: 1,
+              background: 'linear-gradient(90deg, rgba(56,100,255,0.4), rgba(110,231,247,0.4))',
+            }} />
 
-            <div className="text-center">
-              <div className="w-16 h-16 bg-cyan-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <Zap size={32} className="text-cyan-400" />
+            {[
+              { icon: <Upload size={24} color="#7aa4ff" />, label: 'Upload', desc: 'Drop a PDF, Word doc, or text file', n: '01', bg: 'rgba(56,100,255,0.12)', border: 'rgba(56,100,255,0.22)' },
+              { icon: <Zap size={24} color="#4de8a8" />, label: 'Process', desc: 'AI indexes and understands your content', n: '02', bg: 'rgba(20,200,120,0.12)', border: 'rgba(20,200,120,0.22)' },
+              { icon: <MessageSquare size={24} color="#c084fc" />, label: 'Interact', desc: 'Chat, summarize, or quiz — instantly', n: '03', bg: 'rgba(160,90,255,0.12)', border: 'rgba(160,90,255,0.22)' },
+            ].map(({ icon, label, desc, n, bg, border }) => (
+              <div key={n} style={{ textAlign: 'center', padding: '0 24px' }}>
+                <div style={{
+                  width: 56, height: 56,
+                  background: bg,
+                  border: `1px solid ${border}`,
+                  borderRadius: 14,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 20px',
+                  position: 'relative',
+                  zIndex: 1,
+                }}>
+                  {icon}
+                </div>
+                <p style={{ fontSize: 11, fontWeight: 600, letterSpacing: '1px', color: 'rgba(255,255,255,0.25)', marginBottom: 8 }}>{n}</p>
+                <h3 style={{ fontSize: 16, fontWeight: 600, color: '#fff', marginBottom: 8 }}>{label}</h3>
+                <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{desc}</p>
               </div>
-              <div className="text-4xl font-bold text-white mb-2">2</div>
-              <h3 className="text-xl font-semibold text-white mb-2">Process</h3>
-              <p className="text-gray-400">AI analyzes and indexes your documents instantly</p>
-            </div>
-
-            <div className="text-center">
-              <div className="w-16 h-16 bg-teal-500/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                <MessageSquare size={32} className="text-teal-400" />
-              </div>
-              <div className="text-4xl font-bold text-white mb-2">3</div>
-              <h3 className="text-xl font-semibold text-white mb-2">Interact</h3>
-              <p className="text-gray-400">Chat, summarize, or quiz - get insights instantly</p>
-            </div>
+            ))}
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Benefits Section */}
-      <div className="py-24 border-t border-gray-800/50">
-        <div className="max-w-6xl mx-auto px-6 lg:px-12">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+        {/* ── Benefits / Chat mockup ── */}
+        <section style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px 120px' }}>
+          <div style={{
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(160,90,255,0.2), transparent)',
+            marginBottom: 80,
+          }} />
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-6">
-                Built for productivity and security
+              <p style={{ fontSize: 12, fontWeight: 600, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'rgba(160,90,255,0.7)', marginBottom: 14 }}>WHY DOCUMIND</p>
+              <h2 style={{ fontSize: 'clamp(26px, 3.5vw, 36px)', fontWeight: 700, color: '#fff', letterSpacing: '-0.8px', lineHeight: 1.2, marginBottom: 36 }}>
+                Built for productivity<br />and security
               </h2>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <CheckCircle2 size={20} className="text-green-400" />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+                {[
+                  { icon: <CheckCircle2 size={18} color="#4de8a8" />, bg: 'rgba(20,200,120,0.1)', border: 'rgba(20,200,120,0.18)', title: 'Multi-format support', desc: 'Works with PDF, Word, PowerPoint, and plain text' },
+                  { icon: <Shield size={18} color="#7aa4ff" />, bg: 'rgba(56,100,255,0.1)', border: 'rgba(56,100,255,0.18)', title: 'Secure & private', desc: 'Your documents are processed securely and never shared' },
+                  { icon: <Brain size={18} color="#c084fc" />, bg: 'rgba(160,90,255,0.1)', border: 'rgba(160,90,255,0.18)', title: 'Interactive quizzes', desc: 'Test your learning with AI-generated quizzes from your documents' },
+                ].map(({ icon, bg, border, title, desc }) => (
+                  <div key={title} style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                    <div style={{
+                      width: 36, height: 36,
+                      background: bg,
+                      border: `1px solid ${border}`,
+                      borderRadius: 10,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
+                    }}>
+                      {icon}
+                    </div>
+                    <div>
+                      <p style={{ fontSize: 15, fontWeight: 600, color: '#fff', marginBottom: 4 }}>{title}</p>
+                      <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.38)', lineHeight: 1.6 }}>{desc}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Multi-format support</h3>
-                    <p className="text-gray-400">Works with PDF, Word, PowerPoint, and text documents</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Shield size={20} className="text-blue-400" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">Secure & Private</h3>
-                    <p className="text-gray-400">Your documents are processed securely and never shared</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                <Brain size={20} className="text-purple-400" />
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-1">Quiz Generation</h3>
-                <p className="text-gray-400">Auto-generate MCQ quizzes from your documents to test and retain knowledge</p>
-              </div>
-            </div>
+                ))}
               </div>
             </div>
 
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-3xl blur-2xl" />
-              <div className="relative bg-gray-800 rounded-2xl border border-gray-700 p-6 shadow-2xl">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-3 h-3 bg-red-500 rounded-full" />
-                  <div className="w-3 h-3 bg-yellow-500 rounded-full" />
-                  <div className="w-3 h-3 bg-green-500 rounded-full" />
+            {/* Chat mockup */}
+            <div style={{ position: 'relative' }}>
+              <div aria-hidden="true" style={{
+                position: 'absolute', inset: -24,
+                background: 'radial-gradient(ellipse, rgba(56,100,255,0.12) 0%, transparent 70%)',
+                borderRadius: '50%',
+                filter: 'blur(32px)',
+              }} />
+              <div style={{
+                position: 'relative',
+                background: 'rgba(255,255,255,0.03)',
+                border: '1px solid rgba(255,255,255,0.09)',
+                borderRadius: 18,
+                padding: '20px 20px 24px',
+                backdropFilter: 'blur(12px)',
+              }}>
+                {/* Window chrome */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 20 }}>
+                  {['#ff5f57', '#ffbd2e', '#28c840'].map(c => (
+                    <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.7 }} />
+                  ))}
+                  <div style={{
+                    flex: 1, marginLeft: 8,
+                    height: 22, background: 'rgba(255,255,255,0.05)',
+                    borderRadius: 6,
+                    display: 'flex', alignItems: 'center', paddingLeft: 10,
+                  }}>
+                    <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.25)' }}>annual-report-2024.pdf</span>
+                  </div>
                 </div>
-                <div className="space-y-4">
-                  <div className="flex justify-end">
-                    <div className="bg-blue-600 text-white px-4 py-3 rounded-2xl rounded-br-md max-w-xs">
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  {/* User message */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <div style={{
+                      background: 'linear-gradient(135deg, #3864ff, #5a94ff)',
+                      color: '#fff',
+                      padding: '10px 14px',
+                      borderRadius: '14px 14px 4px 14px',
+                      fontSize: 13,
+                      maxWidth: '75%',
+                      lineHeight: 1.5,
+                    }}>
                       What are the key findings in the research paper?
                     </div>
                   </div>
-                  <div className="flex justify-start">
-                    <div className="bg-gray-700 text-gray-100 px-4 py-3 rounded-2xl rounded-bl-md max-w-sm">
-                      <p className="mb-2">The research identifies three key findings:</p>
-                      <ul className="text-sm text-gray-300 space-y-1">
-                        <li>• 40% improvement in efficiency</li>
-                        <li>• Cost reduction of $2.3M annually</li>
-                        <li>• 95% user satisfaction rate</li>
-                      </ul>
+                  {/* AI response */}
+                  <div style={{ display: 'flex', justifyContent: 'flex-start', gap: 8 }}>
+                    <div style={{
+                      width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                      background: 'linear-gradient(135deg, #3864ff, #6ee7f7)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Brain size={14} color="#fff" />
                     </div>
+                    <div style={{
+                      background: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      color: 'rgba(255,255,255,0.8)',
+                      padding: '10px 14px',
+                      borderRadius: '14px 14px 14px 4px',
+                      fontSize: 13,
+                      maxWidth: '80%',
+                      lineHeight: 1.6,
+                    }}>
+                      <p style={{ marginBottom: 8, color: 'rgba(255,255,255,0.6)' }}>The research identifies three key findings:</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {[
+                          { label: '40%', text: 'improvement in efficiency' },
+                          { label: '$2.3M', text: 'annual cost reduction' },
+                          { label: '95%', text: 'user satisfaction rate' },
+                        ].map(({ label, text }) => (
+                          <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                            <span style={{
+                              fontSize: 11, fontWeight: 700,
+                              color: '#7aa4ff',
+                              background: 'rgba(56,100,255,0.15)',
+                              padding: '2px 7px',
+                              borderRadius: 5,
+                              flexShrink: 0,
+                            }}>{label}</span>
+                            <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)' }}>{text}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Input bar */}
+                <div style={{
+                  marginTop: 16,
+                  display: 'flex', alignItems: 'center', gap: 10,
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: 10,
+                  padding: '9px 12px',
+                }}>
+                  <span style={{ flex: 1, fontSize: 12, color: 'rgba(255,255,255,0.2)' }}>Ask a follow-up question…</span>
+                  <div style={{
+                    width: 26, height: 26, borderRadius: 7,
+                    background: 'rgba(56,100,255,0.3)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <ArrowRight size={13} color="#7aa4ff" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* CTA Section */}
-      <div className="py-24 border-t border-gray-800/50">
-        <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
-          <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-cyan-500/20 to-teal-500/20 rounded-3xl blur-3xl" />
-            <div className="relative bg-gray-800/80 backdrop-blur-sm rounded-3xl border border-gray-700 p-12">
-              <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-                Ready to understand your documents?
-              </h2>
-              <p className="text-gray-400 text-lg mb-8">
-                Join thousands of users who save hours every week with DocuMind
-              </p>
-              <Link
-                to="/register"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold rounded-xl transition-all shadow-xl shadow-blue-500/25 hover:scale-105"
-              >
-                Get Started Free
-                <ArrowRight size={20} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+        {/* ── CTA ── */}
+        <section style={{ maxWidth: 680, margin: '0 auto', padding: '0 24px 120px', textAlign: 'center' }}>
+          <div style={{
+            height: 1,
+            background: 'linear-gradient(90deg, transparent, rgba(56,100,255,0.2), transparent)',
+            marginBottom: 80,
+          }} />
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 44px)', fontWeight: 700, color: '#fff', letterSpacing: '-1.2px', lineHeight: 1.15, marginBottom: 16 }}>
+            Ready to understand<br />your documents?
+          </h2>
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.38)', marginBottom: 40 }}>
+            Join thousands of users who save hours every week with DocuMind
+          </p>
+          <Link to="/register" style={{
+            display: 'inline-flex', alignItems: 'center', gap: 9,
+            padding: '14px 32px',
+            background: 'linear-gradient(135deg, #3864ff, #5aa0ff)',
+            color: '#fff',
+            fontWeight: 600,
+            fontSize: 15,
+            textDecoration: 'none',
+            borderRadius: 11,
+            boxShadow: '0 0 48px rgba(56,100,255,0.4)',
+            transition: 'transform 0.15s, box-shadow 0.15s',
+          }}
+            onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'translateY(-2px)'; el.style.boxShadow = '0 0 64px rgba(56,100,255,0.55)'; }}
+            onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.transform = 'none'; el.style.boxShadow = '0 0 48px rgba(56,100,255,0.4)'; }}
+          >
+            Get started free
+            <ArrowRight size={18} />
+          </Link>
+        </section>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-800/50 py-8">
-        <div className="max-w-6xl mx-auto px-6 lg:px-12 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-gray-400">
-            <Brain size={20} />
-            <span>DocuMind</span>
+        {/* ── Footer ── */}
+        <footer style={{
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          padding: '28px 48px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          maxWidth: '100%',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <Brain size={16} color="rgba(255,255,255,0.3)" />
+            <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.3)', fontWeight: 500 }}>DocuMind</span>
           </div>
-          <p className="text-gray-500 text-sm">
+          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.2)' }}>
             © {new Date().getFullYear()} DocuMind. Intelligent document conversations.
           </p>
-        </div>
-      </footer>
+        </footer>
+
+      </div>
     </div>
   );
 };

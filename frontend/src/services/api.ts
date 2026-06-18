@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = 'https://documind-backend-nwin.onrender.com';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -84,7 +84,5 @@ export const generateSummary = (chatId: string) =>
 
 export const generateQuiz = (chatId: string, numQuestions: number) =>
   api.post(`/query/quiz/${chatId}`, { num_questions: numQuestions });
-
-export const getMe = () => api.get('user/me')
 
 export default api;

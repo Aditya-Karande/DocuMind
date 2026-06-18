@@ -296,7 +296,7 @@ PDF / DOCX / PPTX / TXT / Images
 
 ## System Architecture
 
-![Architecture](screenshots/DocuMind_architecture.jpeg)
+![Architecture](screenshots/DocuMind_architecture.jpg)
 
 ---
 
